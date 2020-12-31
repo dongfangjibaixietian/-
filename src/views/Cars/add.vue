@@ -217,6 +217,7 @@ export default {
     },
     /** edit */
     edit(){
+      console.log(...this.form_data);
       CarsEdit({...this.form_data, id: this.id}).then(response => {
         this.$message({
           message: response.message,
@@ -240,10 +241,11 @@ export default {
       GetCarsBrand().then(response => {
         const data = response.data.data;
         if(data) {
+          // 下面的意义是，将data里的form_item过滤，过滤方法是item.prop == "parkingId"，并且把过滤结果返回给parking
           const carsBrand = this.form_item.filter(item => item.prop == "carsBrandId");
           if(carsBrand.length > 0) {
             carsBrand[0].options = data;
-          }
+          };
         }
       })
     },
@@ -271,15 +273,18 @@ export default {
           }
         }
         console.log(this.form_data)
+        // 返回的carsAttr是一个字符串转为json对象
         const carsAttr = JSON.parse(data.carsAttr);
         const arr = [];
         for(let key in carsAttr) {
           const json = {}
           json.attr_key = key;
+          // carsAttr[key]代表的是键值对中的值
           json.attr_value = carsAttr[key];
           // { attr_key: "", attr_value: "" }
           arr.push(json)
         }
+        // 两个json对象键值对中的键相同时，将一个json对象的值赋给另一个json对象的方法
         this.cars_attr = arr;
 
         // { attr_key: "", attr_value: "" }
@@ -287,6 +292,7 @@ export default {
     },
     /** 添加车辆属性 */
     addCarsAttr() {
+      // 把数组push一个空的，就能在v-for中多显示一个
       this.cars_attr.push({ attr_key: "", attr_value: "" });
     },
     /** 删除车辆属性 */
@@ -294,15 +300,20 @@ export default {
       this.cars_attr.splice(index, 1); // 第一个参数：指定数组索引位置， 第二参数：从指定位置开始删除多少个。删除数组的指定元素
     },
     /** 车辆属性格式化 */
+    // 此处数据结构的相互转化非常重要
+    // 注意，此处是很重要的知识点，是把cars_attr这个数组变为json对象的方法
     formatCarsAttr(){
       const data = this.cars_attr;
       if(data && data.length == 0) { return false; }
+      // 这里重新定义了一个空的json对象
       const carsAttr = {};
       data.forEach(item => {
         if(item.attr_key) {
+          // 根据键值对的理念，只要把值赋给相应的键就可以在空的json对象中添加一个新的对象键值对
           carsAttr[item.attr_key] = item.attr_value
         }
       })
+      // 要把json对象塞到数组中，还需要先把json对象转变为一个字符串类型才可以
       this.form_data.carsAttr = JSON.stringify(carsAttr);
     },
     changeEnergyType(value){

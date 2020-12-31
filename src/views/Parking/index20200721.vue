@@ -47,6 +47,7 @@
             <el-table-column prop="parkingName" label="停车场名称"></el-table-column>
             <el-table-column prop="type" label="类型">
                 <template slot-scope="scoped">
+                    <!-- 过滤器的使用，双花括号前面的是要过滤的对象，即getType的参数， | 后面的是过滤方法，在filters中定义即可 -->
                     <span>{{ scoped.row.type | getType }}</span>
                 </template>
             </el-table-column>
@@ -171,6 +172,7 @@ export default {
         },
         /** 编辑 */
         edit(id){
+            // 这种写法进行路由的跳转时，会携带一个明文的参数，即最后的网址会是/ParkingAdd？id=70
             this.$router.push({
                 name: "ParkingAdd",
                 query: {
@@ -190,6 +192,7 @@ export default {
                         type: 'success',
                         message: response.message
                     });
+                    // 删除成功后，只需要重新调一遍列表接口数据即可实现列表的自刷新
                     this.getParkingList();
                 })
             }).catch(() => {});

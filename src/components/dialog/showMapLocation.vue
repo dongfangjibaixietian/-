@@ -25,6 +25,7 @@ export default {
       type: Boolean,
       default: false
     },
+    // 接受类型为json对象时default: () => {}。即传一个空函数过去
     data: {
         type: Object,
         default: () => {}
@@ -40,8 +41,11 @@ export default {
     opened(){
       this.$refs.aMap.mapCreate();
       // 调DOM元素的方法时，要确保DOM元素已被加载完成
-      this.$nextTick(() => { // DOM元素渲染完成后执行
+      this.$nextTick(() => { // $nextTick作用是使DOM元素渲染完成后执行
+      // split(","),即用，号分割数组
         const splitLnglat = this.data.lnglat.split(",");
+        console.log(this.data);
+        console.log(splitLnglat);
         const lnglat = {
             lng: splitLnglat[0],
             lat: splitLnglat[1]

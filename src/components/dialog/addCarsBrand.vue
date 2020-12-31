@@ -1,6 +1,6 @@
 <template>
   <!--dialog 弹窗
-    子组件接收父组件的数据，是通过属性接收
+    子组件接收父组件的数据，是通过在调用子组件时给子组件的属性写上东西接收
   -->
   <el-dialog title="新增车辆品牌" :visible.sync="dialogVisible" class="cars-dialog-center" @close="close" @opened="opened" :close-on-click-modal="false">
     <VueForm :formData="form_data" :formItme="form_item" :formHandler="form_handler">
@@ -140,10 +140,13 @@ export default {
       this.reset("form");
       // 关闭窗口
       this.dialogVisible = false;
+      // 关闭窗口时，把flagVisible：false传给父组件
       this.$emit("update:flagVisible", false); // {}
     }
   },
   watch: {
+    // 此处只是做值的替换，因为flagVisible是从父组件传过来的不能直接更改，
+    // 所以将flagVisible替换为只在子组件生效的dialogVisible，两者的值是相同的
     flagVisible: {
       handler(newValue, oldValue) {
         this.dialogVisible = newValue;

@@ -16,6 +16,8 @@ export function address(value){
 
 /** 停车场类型 */
 export function parkingType(value){
+    // 上面引入了store文件,所以可以直接用store.state拿值
+    // 如果没有引入store文件，就要用this.$store.state拿值
     const data = store.state.config.parking_type_json[value];
     if(data) { return data.label; }
 }

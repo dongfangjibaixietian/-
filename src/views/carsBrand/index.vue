@@ -10,6 +10,7 @@
             <el-button type="danger" size="small" @click="edit(slotData.data)">编辑</el-button>
         </template>
     </TabalData>
+    <!-- .sync修饰符可以使子组件修改数据后改变父组件所传props的值，从而实现数据的双向绑定 -->
     <AddCarsBrand :flagVisible.sync="dialog_show" :data="data_brand" @callbackComponent="callbackComponent" /><!--父组件往子组件传数据时，是一个单向数据流-->
   </div>
 </template>
@@ -30,6 +31,7 @@ export default {
             label: "LOGO", 
             prop: "imgUrl",
             type: "image",
+            // 当有图片时，此处配置图片的大小
             width: 150
           },
           { 
@@ -99,7 +101,8 @@ export default {
     /** 编辑 */
     edit(data){
       // this.data_brand = JSON.parse(JSON.stringify(data));
-      this.data_brand = Object.assign({}, data); // Es6 浅拷贝
+      // 必须要做拷贝，如果不做拷贝的话修改完原数据类型变掉了，不能正常显示
+      this.data_brand = Object.assign({}, data); // Es6 浅拷贝，只能拷贝一层的东西
       this.dialog_show = true;
     },
     /** 禁启用 */
